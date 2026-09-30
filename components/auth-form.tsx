@@ -14,7 +14,7 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (event.nativeEvent.isComposing) return
+    if ('isComposing' in event.nativeEvent && event.nativeEvent.isComposing) return
     setPending(true)
     setError('')
     try {
