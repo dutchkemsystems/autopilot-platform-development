@@ -4,7 +4,7 @@ import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { signIn, signUp } from '@/lib/auth-client'
 
-export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
+export function AuthForm({ mode, nextPath = '/dashboard' }: { mode: 'sign-in' | 'sign-up'; nextPath?: string }) {
   const router = useRouter()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -25,7 +25,8 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
         setError('We could not verify those details. Please try again.')
         return
       }
-      router.push('/dashboard')
+      const destination = nextPath.startsWith('/') && !nextPath.startsWith('//') ? nextPath : '/dashboard'
+      router.push(destination)
       router.refresh()
     } catch {
       setError('Authentication is temporarily unavailable. Please try again.')
