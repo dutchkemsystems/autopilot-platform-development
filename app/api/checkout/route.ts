@@ -18,7 +18,16 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Enter a valid email and checkout details' }, { status: 400 })
     }
 
-    const origin = request.headers.get('origin') ?? process.env.VERCEL_PROJECT_PRODUCTION_URL ?? 'http://localhost:3000'
+    const requestOrigin = request.headers.get('origin')
+    const configuredOrigins = [
+      process.env.BETTER_AUTH_URL,
+      process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : undefined,
+      process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined,
+      'http://localhost:3000',
+    ].filter((value): value is string => Boolean(value))
+    const origin = requestOrigin && configuredOrigins.includes(requestOrigin)
+      ? requestOrigin
+      : configuredOrigins[0] ?? 'http://localhost:3000'
     const stripe = new Stripe(secretKey)
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',

@@ -47,6 +47,3 @@ export async function getSession(requestHeaders: Headers) {
 export { baseURL }
 
 export default auth
-
-// This connection is intentionally shared with the auth handler and is closed by the runtime.
-export const authPool = new Pool({ connectionString: process.env.DATABASE_URL })
