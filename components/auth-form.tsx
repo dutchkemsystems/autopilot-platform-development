@@ -17,16 +17,21 @@ export function AuthForm({ mode }: { mode: 'sign-in' | 'sign-up' }) {
     if (event.nativeEvent.isComposing) return
     setPending(true)
     setError('')
-    const result = mode === 'sign-in'
-      ? await signIn.email({ email, password })
-      : await signUp.email({ email, password, name })
-    if (result.error) {
-      setError('We could not verify those details. Please try again.')
+    try {
+      const result = mode === 'sign-in'
+        ? await signIn.email({ email, password })
+        : await signUp.email({ email, password, name })
+      if (result.error) {
+        setError('We could not verify those details. Please try again.')
+        return
+      }
+      router.push('/dashboard')
+      router.refresh()
+    } catch {
+      setError('Authentication is temporarily unavailable. Please try again.')
+    } finally {
       setPending(false)
-      return
     }
-    router.push('/dashboard')
-    router.refresh()
   }
 
   return (

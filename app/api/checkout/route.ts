@@ -3,8 +3,9 @@ import Stripe from 'stripe'
 import { PRODUCTS } from '@/lib/products'
 
 export async function POST(request: Request) {
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
   try {
+    if (!process.env.STRIPE_SECRET_KEY) return NextResponse.json({ error: 'Checkout is not configured' }, { status: 503 })
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
     const body = await request.json() as { productId?: string; quantity?: number }
     const product = PRODUCTS.find((item) => item.id === body.productId)
     const quantity = body.quantity ?? 1
