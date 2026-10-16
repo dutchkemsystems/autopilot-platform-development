@@ -14,7 +14,7 @@
     "@stripe/stripe-js": "^9.17.0",
     "@vercel/analytics": "1.6.1",
     "ai": "^7.0.122",
-    "better-auth": "^1.7.6",
+    "better-auth": "^1.7.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.45.3",
